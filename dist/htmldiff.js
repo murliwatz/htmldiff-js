@@ -2779,7 +2779,7 @@ Object.defineProperty(exports, "__esModule", {
 var tagRegex = /^\s*<\/?[^>]+>\s*$/;
 var tagWordRegex = /<[^\s>]+/;
 var whitespaceRegex = /^(\s|&nbsp;)+$/;
-var wordRegex = /[\w\#@]+/;
+var wordRegex = /[\w\#@,.]+/;
 
 var specialCaseWordTags = ['<img'];
 
@@ -9382,7 +9382,9 @@ var HtmlDiff = function () {
                     this.content.push(text);
                 } else {
                     if (specialCaseOpeningTagRegex.test(words[0])) {
-                        this.specialTagDiffStack.push(words[0]);
+                        var matchedTag = words[0].match(specialCaseOpeningTagRegex);
+                        matchedTag = '<' + matchedTag[0].replace(/(<|>| )/g, '') + '>';
+                        this.specialTagDiffStack.push(matchedTag);
                         specialCaseTagInjection = '<ins class="mod">';
                         if (tag === 'del') {
                             words.shift();
